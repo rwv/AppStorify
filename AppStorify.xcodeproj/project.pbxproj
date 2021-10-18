@@ -57,6 +57,7 @@
 			children = (
 				2CA81870271DC49400E11D02 /* AppDelegate.swift */,
 				2CA81872271DC49400E11D02 /* ContentView.swift */,
+				2CA81884271DC4A500E11D02 /* Models */,
 				2CA81874271DC49500E11D02 /* Assets.xcassets */,
 				2CA81879271DC49500E11D02 /* Main.storyboard */,
 				2CA8187C271DC49500E11D02 /* Info.plist */,
@@ -72,6 +73,13 @@
 				2CA81877271DC49500E11D02 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		2CA81884271DC4A500E11D02 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
