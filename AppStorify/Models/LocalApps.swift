@@ -3,6 +3,7 @@ import Foundation
 let PATH_TO_FIND = ["/Applications"]
 
 class LocalApps: ObservableObject   {
+    @Published var country: String = Locale.current.regionCode ?? "US"
     @Published var apps: [LocalApp] = []
     @Published var matched_apps: [LocalApp] = []
     @Published var ready_apps_count = 0
@@ -21,7 +22,7 @@ class LocalApps: ObservableObject   {
             do {
                 let app_filenames = try FileManager.default.contentsOfDirectory(atPath: path).filter { $0.suffix(4) == ".app" }
                 for app_filename in app_filenames {
-                    self.apps.append(LocalApp(path: path + "/" + app_filename, parent: self))
+                    self.apps.append(LocalApp(path: path + "/" + app_filename, country: country, parent: self))
                 }
             }
             catch {

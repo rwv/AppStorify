@@ -16,7 +16,7 @@ class AppStoreApp: ObservableObject  {
         
         // generate search url
         let queryItems = [URLQueryItem(name: "term", value: self.searchAppName),
-                          URLQueryItem(name: "country", value: "US"),
+                          URLQueryItem(name: "country", value: country),
                           URLQueryItem(name: "media", value: "software"),
                           URLQueryItem(name: "entity", value: "macSoftware"),
                           URLQueryItem(name: "limit", value: "1"),]

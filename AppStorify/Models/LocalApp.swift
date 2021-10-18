@@ -12,7 +12,7 @@ class LocalApp: Identifiable {
     var appstore_app: AppStoreApp!
     weak var parent: LocalApps!
     
-    init(path: String, parent: LocalApps? = nil) {
+    init(path: String, country: String = "US", parent: LocalApps? = nil) {
         self.path = path
         if parent != nil {
             self.parent = parent
@@ -38,7 +38,7 @@ class LocalApp: Identifiable {
         
         // search for App Store
         if !(isAppleApp) && !(isAppStore) {
-            self.appstore_app = AppStoreApp(searchAppName: self.appName, parent: self)
+            self.appstore_app = AppStoreApp(searchAppName: self.appName, country: country, parent: self)
         }
         else {
             self.appstore_app = nil
