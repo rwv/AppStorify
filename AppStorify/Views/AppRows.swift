@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct ContentView: View {
+struct AppRows: View {
     @ObservedObject var apps: LocalApps
     
     init(apps: LocalApps) {
@@ -8,13 +8,14 @@ struct ContentView: View {
     }
     
     var body: some View {
-        AppRows(apps: self.apps)
+        List(apps.matched_apps) {app in
+            AppRow(app: app)
+        }
     }
 }
 
-
-struct ContentView_Previews: PreviewProvider {
+struct AppRows_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView(apps: LocalApps())
+        AppRows(apps: LocalApps())
     }
 }
