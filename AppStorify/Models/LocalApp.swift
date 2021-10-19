@@ -10,13 +10,11 @@ class LocalApp: Identifiable {
     let id = UUID()
     let info: [String: Any]
     var appstore_app: AppStoreApp!
-    weak var parent: LocalApps!
+    unowned let parent: LocalApps
     
-    init(path: String, country: String = "US", parent: LocalApps? = nil) {
+    init(path: String, country: String = "US", parent: LocalApps) {
         self.path = path
-        if parent != nil {
-            self.parent = parent
-        }
+        self.parent = parent
         
         do {
             let MDItem = MDItemCreate(kCFAllocatorDefault, path as CFString)
@@ -31,7 +29,6 @@ class LocalApp: Identifiable {
         } catch {
             print("Failed to get info from \(path)")
             self.info = [String: Any]()
-            self.appstore_app = nil
             self.parent.ready_apps_count += 1
             return
         }
@@ -41,7 +38,6 @@ class LocalApp: Identifiable {
             self.appstore_app = AppStoreApp(searchAppName: self.appName, country: country, parent: self)
         }
         else {
-            self.appstore_app = nil
             self.parent.ready_apps_count += 1
         }
     }

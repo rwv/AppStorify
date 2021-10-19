@@ -58,6 +58,6 @@ struct AppRow: View {
 
 struct AppRow_Previews: PreviewProvider {
     static var previews: some View {
-        AppRow(app: LocalApp(path: "/Applications/iStat Menus.app"))
+        AppRow(app: LocalApp(path: "/Applications/iStat Menus.app", parent: LocalApps.shared))
     }
 }

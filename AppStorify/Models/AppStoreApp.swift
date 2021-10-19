@@ -9,10 +9,11 @@ class AppStoreApp: ObservableObject  {
     @Published var matched = false
     @Published var appId: Int!
     @Published var version: String!
-    weak var parent: LocalApp!
+    weak var parent: LocalApp?
     
-    init(searchAppName: String, country: String = "US", parent: LocalApp? = nil) {
+    init(searchAppName: String, country: String = "US", parent: LocalApp) {
         self.searchAppName = searchAppName
+        self.parent = parent
         
         // generate search url
         let queryItems = [URLQueryItem(name: "term", value: self.searchAppName),
@@ -24,10 +25,7 @@ class AppStoreApp: ObservableObject  {
         var urlComps = URLComponents(string: ITUNES_SEARCH_API)!
         urlComps.queryItems = queryItems
         let url = urlComps.url!
-        
-        if parent != nil {
-            self.parent=parent
-        }
+
         
         URLSession.shared.dataTask(with: url) { data, response, error in
             if let data = data {
@@ -52,8 +50,8 @@ class AppStoreApp: ObservableObject  {
                                             self.version = result["version"] as? String
                                             self.appId = result["trackId"] as? Int
                                             
-                                            if let local_apps = self.parent?.parent {
-                                                local_apps.matched_apps.append(self.parent)
+                                            if let local_app = self.parent {
+                                                local_app.parent.matched_apps.append(local_app)
                                             }
                                         }
                                     }
