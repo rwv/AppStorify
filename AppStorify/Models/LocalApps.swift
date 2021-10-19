@@ -5,12 +5,14 @@ let PATH_TO_FIND = ["/Applications"]
 class LocalApps: ObservableObject {
     let availableCountryCode = ["CN", "US"]
     
+    static let shared = LocalApps()
+    
     @Published var country: String = Locale.current.regionCode ?? "US"
     @Published var apps: [LocalApp] = []
     @Published var matched_apps: [LocalApp] = []
     @Published var ready_apps_count = 0
     
-    init() {
+    private init() {
         self.refresh()
     }
     

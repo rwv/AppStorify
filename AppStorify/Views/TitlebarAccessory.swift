@@ -105,6 +105,6 @@ struct TitlebarAccessory: View {
 
 struct TitlebarAccessory_Previews: PreviewProvider {
     static var previews: some View {
-        TitlebarAccessory(apps: LocalApps())
+        TitlebarAccessory(apps: LocalApps.shared)
     }
 }

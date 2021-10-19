@@ -16,6 +16,6 @@ struct AppRows: View {
 
 struct AppRows_Previews: PreviewProvider {
     static var previews: some View {
-        AppRows(apps: LocalApps())
+        AppRows(apps: LocalApps.shared)
     }
 }
