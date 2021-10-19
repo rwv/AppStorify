@@ -31,21 +31,23 @@ class AppStoreApp: ObservableObject  {
         
         URLSession.shared.dataTask(with: url) { data, response, error in
             if let data = data {
-                DispatchQueue.main.async {
-                    do {
-                        defer {
+                do {
+                    defer {
+                        DispatchQueue.main.async {
                             self.fetched = true
                             if let local_apps = self.parent?.parent {
                                 local_apps.ready_apps_count += 1
                             }
                         }
-                        if let response_info = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String:Any]{
-                            if let results = response_info["results"] as? [[String:Any]] {
-                                if results.count > 0 {
-                                    let result = results[0]
-                                    if let appStoreAppName = result["trackName"] as? String {
-                                        // if app name equals
-                                        if appStoreAppName == self.searchAppName {
+                    }
+                    if let response_info = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String:Any]{
+                        if let results = response_info["results"] as? [[String:Any]] {
+                            if results.count > 0 {
+                                let result = results[0]
+                                if let appStoreAppName = result["trackName"] as? String {
+                                    // if app name equals
+                                    if appStoreAppName == self.searchAppName {
+                                        DispatchQueue.main.async {
                                             self.matched = true
                                             self.version = result["version"] as? String
                                             self.appId = result["trackId"] as? Int
@@ -59,9 +61,9 @@ class AppStoreApp: ObservableObject  {
                             }
                         }
                     }
-                    catch {
-                        print(error)
-                    }
+                }
+                catch {
+                    print(error)
                 }
             }
         }.resume()
