@@ -60,7 +60,7 @@ struct CountryCodeSelectionSheetView: View {
 struct TitlebarAccessory: View {
     @ObservedObject var apps: LocalApps
     @State private var sheetIsShowing: Bool = false
-
+    
     var body: some View {
         HStack(alignment: .bottom) {
             Group {

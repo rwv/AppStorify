@@ -3,24 +3,24 @@ import SwiftUI
 
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
-
+    
     var window: NSWindow!
     let localAppsInstance = LocalApps.shared
-
+    
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         // Create the SwiftUI view that provides the window contents.
         let contentView = ContentView(apps: self.localAppsInstance)
-
+        
         
         // Create the titlebar accessory
         let titlebarAccessoryView = TitlebarAccessory(apps: self.localAppsInstance).edgesIgnoringSafeArea(.top)
-
+        
         let accessoryHostingView = NSHostingView(rootView:titlebarAccessoryView)
         accessoryHostingView.frame.size = accessoryHostingView.fittingSize
-
+        
         let titlebarAccessory = NSTitlebarAccessoryViewController()
         titlebarAccessory.view = accessoryHostingView
-
+        
         
         // Create the window and set the content view.
         window = NSWindow(
@@ -36,7 +36,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         window.contentView = NSHostingView(rootView: contentView)
         window.makeKeyAndOrderFront(nil)
     }
-
+    
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
         return true
     }

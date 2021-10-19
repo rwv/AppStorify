@@ -25,7 +25,7 @@ class AppStoreApp: ObservableObject  {
         var urlComps = URLComponents(string: ITUNES_SEARCH_API)!
         urlComps.queryItems = queryItems
         let url = urlComps.url!
-
+        
         
         URLSession.shared.dataTask(with: url) { data, response, error in
             if let data = data {
