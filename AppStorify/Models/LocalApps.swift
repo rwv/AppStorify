@@ -26,7 +26,7 @@ class LocalApps: ObservableObject {
             do {
                 let app_filenames = try FileManager.default.contentsOfDirectory(atPath: path).filter { $0.suffix(4) == ".app" }
                 for app_filename in app_filenames {
-                    self.apps.append(LocalApp(path: path + "/" + app_filename, country: country, parent: self))
+                    self.apps.append(LocalApp(path: "\(path)/\(app_filename)", country: country, parent: self))
                 }
             }
             catch {
@@ -36,7 +36,6 @@ class LocalApps: ObservableObject {
     }
     
     func setCountryCode(country: String) -> Void {
-        print("using"+country)
         self.country = country
         self.refresh()
     }
