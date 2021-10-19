@@ -28,48 +28,46 @@ class AppStoreApp: ObservableObject  {
         
         
         URLSession.shared.dataTask(with: url) { data, response, error in
-            if let data = data {
-                do {
-                    defer {
+            guard let data = data else { return }
+            
+            do {
+                defer {
+                    DispatchQueue.main.async {
+                        self.fetched = true
+                        if let local_apps = self.parent?.parent {
+                            local_apps.ready_apps_count += 1
+                        }
+                    }
+                }
+                
+                guard let response_info = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String:Any] else { return }
+                guard let results = response_info["results"] as? [[String:Any]] else { return }
+                if results.count > 0 {
+                    let result = results[0]
+                    guard let appStoreAppName = result["trackName"] as? String else { return }
+                    
+                    if appStoreAppName == self.searchAppName {
                         DispatchQueue.main.async {
-                            self.fetched = true
-                            if let local_apps = self.parent?.parent {
-                                local_apps.ready_apps_count += 1
-                            }
-                        }
-                    }
-                    if let response_info = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String:Any]{
-                        if let results = response_info["results"] as? [[String:Any]] {
-                            if results.count > 0 {
-                                let result = results[0]
-                                if let appStoreAppName = result["trackName"] as? String {
-                                    // if app name equals
-                                    if appStoreAppName == self.searchAppName {
-                                        DispatchQueue.main.async {
-                                            self.matched = true
-                                            self.version = result["version"] as? String
-                                            self.appId = result["trackId"] as? Int
-                                            
-                                            if let local_app = self.parent {
-                                                local_app.parent.matched_apps.append(local_app)
-                                            }
-                                        }
-                                    }
-                                }
+                            self.matched = true
+                            self.version = result["version"] as? String
+                            self.appId = result["trackId"] as? Int
+                            
+                            if let local_app = self.parent {
+                                local_app.parent.matched_apps.append(local_app)
                             }
                         }
                     }
                 }
-                catch {
-                    print(error)
-                }
+            }
+            catch {
+                print(error)
             }
         }.resume()
     }
     
-    func openAppStore() ->  Void {
-        if self.appId != nil {
-            if let url = URL(string: "itms-apps://apple.com/app/id" + String(self.appId!)) {
+    func openAppStore() -> Void {
+        if let appId = self.appId {
+            if let url = URL(string: "itms-apps://apple.com/app/id\(appId)") {
                 NSWorkspace.shared.open(url)
             }
         }
