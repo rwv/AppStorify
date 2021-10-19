@@ -1,10 +1,9 @@
 import Foundation
 
 let PATH_TO_FIND = ["/Applications"]
+let AVAILABLE_COUNTRY_CODE = ["CN", "US"]
 
 class LocalApps: ObservableObject {
-    let availableCountryCode = ["CN", "US"]
-    
     static let shared = LocalApps()
     
     @Published var country: String = Locale.current.regionCode ?? "US"
