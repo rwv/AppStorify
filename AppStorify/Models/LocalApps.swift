@@ -2,7 +2,9 @@ import Foundation
 
 let PATH_TO_FIND = ["/Applications"]
 
-class LocalApps: ObservableObject   {
+class LocalApps: ObservableObject {
+    let availableCountryCode = ["CN", "US"]
+    
     @Published var country: String = Locale.current.regionCode ?? "US"
     @Published var apps: [LocalApp] = []
     @Published var matched_apps: [LocalApp] = []
@@ -29,6 +31,12 @@ class LocalApps: ObservableObject   {
                 continue
             }
         }
+    }
+    
+    func setCountryCode(country: String) -> Void {
+        print("using"+country)
+        self.country = country
+        self.refresh()
     }
     
     var apps_count: Int {
