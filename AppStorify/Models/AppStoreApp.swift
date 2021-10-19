@@ -10,6 +10,7 @@ class AppStoreApp: ObservableObject  {
     @Published var appId: Int!
     @Published var version: String!
     weak var parent: LocalApp?
+    private weak var task: URLSessionTask?
     
     init(searchAppName: String, country: String = "US", parent: LocalApp) {
         self.searchAppName = searchAppName
@@ -27,7 +28,7 @@ class AppStoreApp: ObservableObject  {
         let url = urlComps.url!
         
         
-        URLSession.shared.dataTask(with: url) { data, response, error in
+        let task = URLSession.shared.dataTask(with: url) { data, response, error in
             guard let data = data else { return }
             
             do {
@@ -62,7 +63,14 @@ class AppStoreApp: ObservableObject  {
             catch {
                 print(error)
             }
-        }.resume()
+        }
+        
+        task.resume()
+        self.task = task
+    }
+    
+    deinit {
+        task?.cancel()
     }
     
     func openAppStore() -> Void {
