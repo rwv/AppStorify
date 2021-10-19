@@ -35,7 +35,9 @@ class AppStoreApp: ObservableObject  {
                     do {
                         defer {
                             self.fetched = true
-                            self.parent.parent.ready_apps_count += 1
+                            if let local_apps = self.parent?.parent {
+                                local_apps.ready_apps_count += 1
+                            }
                         }
                         if let response_info = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String:Any]{
                             if let results = response_info["results"] as? [[String:Any]] {
