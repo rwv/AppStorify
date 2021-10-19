@@ -5,9 +5,8 @@ enum LocalAppError: Error {
     case failedMDItem
 }
 
-class LocalApp: Identifiable {
+class LocalApp {
     let path: String
-    let id = UUID()
     let info: [String: Any]
     var appstore_app: AppStoreApp!
     unowned let parent: LocalApps

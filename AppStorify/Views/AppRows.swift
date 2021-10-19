@@ -4,7 +4,7 @@ struct AppRows: View {
     @ObservedObject var apps: LocalApps
     
     var body: some View {
-        List(apps.matched_apps) {app in
+        List(apps.matched_apps, id: \.self.path) {app in
             AppRow(app: app)
         }
     }
