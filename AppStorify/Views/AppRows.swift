@@ -3,10 +3,6 @@ import SwiftUI
 struct AppRows: View {
     @ObservedObject var apps: LocalApps
     
-    init(apps: LocalApps) {
-        self.apps = apps
-    }
-    
     var body: some View {
         List(apps.matched_apps) {app in
             AppRow(app: app)
