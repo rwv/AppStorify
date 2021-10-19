@@ -41,8 +41,8 @@ struct CountryCodeSelectionSheetView: View {
     var body: some View {
         VStack {
             Picker("App Store\nCountry Code", selection: $selectedCountry) {
-                ForEach(AVAILABLE_COUNTRY_CODE, id: \.self) { countryCode in
-                    Text(countryCode)
+                ForEach(Array(AVAILABLE_COUNTRY_CODE), id: \.self) { countryCode in
+                    Text("\(countryCode)\t\(AVAILABLE_COUNTRY_CODE_MAP[countryCode]!)")
                 }
             }
             Button("OK") {
