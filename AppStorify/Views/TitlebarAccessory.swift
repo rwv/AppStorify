@@ -47,7 +47,9 @@ struct CountryCodeSelectionSheetView: View {
             }
             Button("OK") {
                 self.isVisible = false
-                apps.setCountryCode(country: selectedCountry)
+                if selectedCountry != apps.country {
+                    apps.setCountryCode(country: selectedCountry)
+                }
             }
         }
         .frame(width: 300, height: 100)
