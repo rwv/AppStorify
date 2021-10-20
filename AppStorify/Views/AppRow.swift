@@ -17,6 +17,7 @@ struct AppRow: View {
                     Spacer(minLength: gp.size.width*0.05)
                     app.icon
                         .frame(width: gp.size.width*0.1, alignment: .leading)
+                        .accessibility(label: Text("Icon of \(app.appName)"))
                     VStack(alignment: .leading) {
                         Text(app.appName)
                             .font(.title)
@@ -49,6 +50,7 @@ struct AppRow: View {
                     Button(action: store_app.openAppStore)  {
                         Text("App Store")
                     }.frame(width: gp.size.width*0.2, alignment: .trailing)
+                    .accessibility(label: Text("Go to App Store"))
                     Spacer(minLength: gp.size.width*0.05)
                 }
             }.frame(height: 60).frame(maxWidth: .infinity)
