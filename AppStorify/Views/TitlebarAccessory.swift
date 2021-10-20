@@ -90,16 +90,21 @@ struct TitlebarAccessory: View {
                 }) {
                     Image(nsImage: NSImage(named: NSImage.refreshTemplateName)!)
                 }.buttonStyle(BorderlessButtonStyle())
+                .accessibility(label: Text("Refresh"))
                 Button(action: {
                     NSWorkspace.shared.open(URL(string: GITHUB_URL)!)
                 }) {
                     Image(nsImage: NSImage(named: NSImage.homeTemplateName)!)
                 }.buttonStyle(BorderlessButtonStyle())
+                .accessibility(label: Text("Homepage"))
+                .accessibility(hint: Text("Go to Project Homepage"))
                 Button(action: {
                     self.sheetIsShowing = true
                 }) {
                     Image(nsImage: NSImage(named: NSImage.actionTemplateName)!)
                 }.buttonStyle(BorderlessButtonStyle())
+                .accessibility(label: Text("Settings"))
+                .accessibility(hint: Text("Open Settings"))
             }.frame(maxWidth: .infinity, alignment: .trailing)
         }
         .frame(maxWidth: .infinity)
