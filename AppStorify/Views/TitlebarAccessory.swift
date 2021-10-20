@@ -8,6 +8,7 @@
 
 import SwiftUI
 
+let GITHUB_URL = "https://github.com/rwv/AppStorify"
 
 struct ProgressIndicator: NSViewRepresentable {
     var style: NSProgressIndicator.Style
@@ -88,6 +89,11 @@ struct TitlebarAccessory: View {
                     self.apps.refresh()
                 }) {
                     Image(nsImage: NSImage(named: NSImage.refreshTemplateName)!)
+                }.buttonStyle(BorderlessButtonStyle())
+                Button(action: {
+                    NSWorkspace.shared.open(URL(string: GITHUB_URL)!)
+                }) {
+                    Image(nsImage: NSImage(named: NSImage.homeTemplateName)!)
                 }.buttonStyle(BorderlessButtonStyle())
                 Button(action: {
                     self.sheetIsShowing = true
