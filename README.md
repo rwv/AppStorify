@@ -1,6 +1,8 @@
 # AppStorify
 🍎 An App to check whether a non-App Store app is in App Store.
 
+[![Download on the Mac App Store](https://raw.githubusercontent.com/rwv/AppStorify/main/img/README/Download_on_the_Mac_App_Store_Badge.svg)](https://apps.apple.com/us/app/appstorify/id1591245624)
+
 ## Benfits
 
 * Use App Store's upgrade mechanism instead of app's.
@@ -10,9 +12,6 @@
 ## Screenshots
 
 ![Screenshot of AppStorify](https://github.com/rwv/AppStorify/blob/main/img/README/Screenshot.png?raw=true)
-## Mac App Store
-
-[![Download on the Mac App Store](https://raw.githubusercontent.com/rwv/AppStorify/main/img/README/Download_on_the_Mac_App_Store_Badge.svg)](https://apps.apple.com/us/app/appstorify/id1591245624)
 
 ## Download Directly
 
