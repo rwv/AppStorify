@@ -9,10 +9,10 @@
 
 ## Screenshots
 
-![Screenshot of AppStorify](https://github.com/rwv/AppStorify/blob/master/img/README/Screenshot.png?raw=true)
+![Screenshot of AppStorify](https://github.com/rwv/AppStorify/blob/main/img/README/Screenshot.png?raw=true)
 ## Mac App Store
 
-[![Download on the Mac App Store](https://github.com/rwv/AppStorify/blob/master/img/README/Download_on_the_Mac_App_Store_Badge.svg?raw=true)](https://apps.apple.com/us/app/appstorify/id1591245624)
+[![Download on the Mac App Store](https://raw.githubusercontent.com/rwv/AppStorify/main/img/README/Download_on_the_Mac_App_Store_Badge.svg)](https://apps.apple.com/us/app/appstorify/id1591245624)
 
 ## Download Directly
 
