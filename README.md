@@ -23,3 +23,7 @@ See [Release](https://github.com/rwv/AppStorify/releases)
 ``` bash
 $ python AppStorify.py
 ```
+
+## License
+
+GNU General Public License v3.0
