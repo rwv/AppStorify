@@ -1,13 +1,9 @@
 import Foundation
 import SwiftUI
 
-enum LocalAppError: Error {
-    case failedMDItem
-}
-
 class LocalApp {
     let path: String
-    let info: [String: Any]
+    var info: [String: Any]!
     var appstore_app: AppStoreApp!
     unowned let parent: LocalApps
     
@@ -15,7 +11,7 @@ class LocalApp {
         self.path = path
         self.parent = parent
         
-        do {
+        DispatchQueue.global(qos: .default).async {
             // run "mdls -plist - path"
             let task = Process()
             let pipe = Pipe()
@@ -27,27 +23,26 @@ class LocalApp {
             
             var propertyListFormat =  PropertyListSerialization.PropertyListFormat.xml
             
-            guard let plistXML = String(data: data, encoding: .utf8),
-                  let plistData:Data = plistXML.data(using: .utf8),
-                  let swiftDictionary = try? PropertyListSerialization.propertyList(from: plistData, format: &propertyListFormat) as? [String:Any]
-            else {
-                throw LocalAppError.failedMDItem
+            if let plistXML = String(data: data, encoding: .utf8),
+               let plistData:Data = plistXML.data(using: .utf8),
+               let swiftDictionary = try? PropertyListSerialization.propertyList(from: plistData, format: &propertyListFormat) as? [String:Any] {
+                DispatchQueue.main.async {
+                    self.info = swiftDictionary
+                    // search for App Store
+                    if !(self.isAppleApp) && !(self.isAppStore) {
+                        self.appstore_app = AppStoreApp(searchAppName: self.appName, country: country, parent: self)
+                    }
+                    else {
+                        self.parent.ready_apps_count += 1
+                    }
+                }
             }
-            
-            self.info = swiftDictionary
-        } catch {
-            print("Failed to get info from \(path)")
-            self.info = [String: Any]()
-            self.parent.ready_apps_count += 1
-            return
-        }
-        
-        // search for App Store
-        if !(isAppleApp) && !(isAppStore) {
-            self.appstore_app = AppStoreApp(searchAppName: self.appName, country: country, parent: self)
-        }
-        else {
-            self.parent.ready_apps_count += 1
+            else {
+                DispatchQueue.main.async {
+                    print("Failed to get info from \(path)")
+                    self.parent.ready_apps_count += 1
+                }
+            }
         }
     }
     
