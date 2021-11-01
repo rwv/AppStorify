@@ -16,15 +16,25 @@ class LocalApp {
         self.parent = parent
         
         do {
-            let MDItem = MDItemCreate(kCFAllocatorDefault, path as CFString)
-            let names = MDItemCopyAttributeNames(MDItem)
-            let cfDict = MDItemCopyAttributes(MDItem, names);
-            if let dict = cfDict as? [String: Any] {
-                self.info = dict
-            }
-            else{
+            // run "mdls -plist - path"
+            let task = Process()
+            let pipe = Pipe()
+            task.standardOutput = pipe
+            task.arguments = ["-plist", "-", path]
+            task.launchPath = "/usr/bin/mdls"
+            task.launch()
+            let data = pipe.fileHandleForReading.readDataToEndOfFile()
+            
+            var propertyListFormat =  PropertyListSerialization.PropertyListFormat.xml
+            
+            guard let plistXML = String(data: data, encoding: .utf8),
+                  let plistData:Data = plistXML.data(using: .utf8),
+                  let swiftDictionary = try? PropertyListSerialization.propertyList(from: plistData, format: &propertyListFormat) as? [String:Any]
+            else {
                 throw LocalAppError.failedMDItem
             }
+            
+            self.info = swiftDictionary
         } catch {
             print("Failed to get info from \(path)")
             self.info = [String: Any]()
