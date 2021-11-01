@@ -13,7 +13,9 @@ class LocalApps: ObservableObject {
     @Published var ready_apps_count = 0
     
     private init() {
+        // Set search path
         var _paths_to_find = ["/Applications"]
+        // User folder applications folder
         if let userApplicationDirectoryPath = try? FileManager.default.url(for: .applicationDirectory,
                                                                            in: .userDomainMask,
                                                                            appropriateFor: nil,
@@ -30,13 +32,49 @@ class LocalApps: ObservableObject {
         self.matched_apps = []
         self.ready_apps_count = 0
         
+        let ignoreApps = getAppStoreApps() + getAppleApps()
+        
         for path in paths_to_find {
             if let app_filenames = try? FileManager.default.contentsOfDirectory(atPath: path).filter({ $0.suffix(4) == ".app" }) {
                 for app_filename in app_filenames {
-                    self.apps.append(LocalApp(path: "\(path)/\(app_filename)", country: country, parent: self))
+                    let app_path = "\(path)/\(app_filename)"
+                    if !ignoreApps.contains(app_path) {
+                        self.apps.append(LocalApp(path: app_path, country: country, parent: self))
+                        print(app_path)
+                    }
                 }
             }
         }
+    }
+    
+    func getAppStoreApps() -> [String] {
+        let task = Process()
+        let pipe = Pipe()
+        task.standardOutput = pipe
+        task.arguments = ["-onlyin", "/Applications", "(kMDItemAppStoreHasReceipt=1) && (kMDItemKind=Application)"]
+        task.launchPath = "/usr/bin/mdfind"
+        task.launch()
+        let data = pipe.fileHandleForReading.readDataToEndOfFile()
+        guard let task_result = String(data: data, encoding: .utf8) else {
+            return []
+        }
+        let apps = task_result.split(whereSeparator: \.isNewline).map{ String($0) }
+        return apps
+    }
+    
+    func getAppleApps() -> [String] {
+        let task = Process()
+        let pipe = Pipe()
+        task.standardOutput = pipe
+        task.arguments = ["-onlyin", "/Applications", "(kMDItemCFBundleIdentifier=com.apple.*) && (kMDItemKind=Application)"]
+        task.launchPath = "/usr/bin/mdfind"
+        task.launch()
+        let data = pipe.fileHandleForReading.readDataToEndOfFile()
+        guard let task_result = String(data: data, encoding: .utf8) else {
+            return []
+        }
+        let apps = task_result.split(whereSeparator: \.isNewline).map{ String($0) }
+        return apps
     }
     
     func setCountryCode(country: String) -> Void {
