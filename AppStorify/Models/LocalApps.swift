@@ -2,7 +2,7 @@ import Foundation
 
 let DEFAULT_COUNTRY_CODE = "US"
 
-func mdfindApps(path: String, query: String) -> [String] {
+func mdfindApps(path: String, query: String) -> Set<String> {
     let task = Process()
     let pipe = Pipe()
     task.standardOutput = pipe
@@ -13,21 +13,21 @@ func mdfindApps(path: String, query: String) -> [String] {
     guard let task_result = String(data: data, encoding: .utf8) else {
         return []
     }
-    return task_result.split(whereSeparator: \.isNewline).map{ String($0) }
+    return Set(task_result.split(whereSeparator: \.isNewline).map{ String($0) })
 }
 
-func getAppStoreApps(_ paths: [String]) -> [String] {
-    var apps = [String]()
+func getAppStoreApps(_ paths: Set<String>) -> Set<String> {
+    var apps = Set<String>()
     for path in paths {
-        apps += mdfindApps(path: path, query: "(kMDItemAppStoreHasReceipt=1) && (kMDItemKind=Application)")
+        apps = apps.union(mdfindApps(path: path, query: "(kMDItemAppStoreHasReceipt=1) && (kMDItemKind=Application)"))
     }
     return apps
 }
 
-func getAppleApps(_ paths: [String]) -> [String] {
-    var apps = [String]()
+func getAppleApps(_ paths: Set<String>) -> Set<String> {
+    var apps = Set<String>()
     for path in paths {
-        apps += mdfindApps(path: path, query: "(kMDItemCFBundleIdentifier=com.apple.*) && (kMDItemKind=Application)")
+        apps = apps.union(mdfindApps(path: path, query: "(kMDItemCFBundleIdentifier=com.apple.*) && (kMDItemKind=Application)"))
     }
     return apps
 }
@@ -35,7 +35,7 @@ func getAppleApps(_ paths: [String]) -> [String] {
 class LocalApps: ObservableObject {
     static let shared = LocalApps()
     
-    let paths_to_find: [String]
+    let paths_to_find: Set<String>
     
     @Published var country: String = (AVAILABLE_COUNTRY_CODE.contains(Locale.current.regionCode ?? DEFAULT_COUNTRY_CODE)) ? (Locale.current.regionCode ?? DEFAULT_COUNTRY_CODE) : DEFAULT_COUNTRY_CODE
     @Published var apps: [LocalApp] = []
@@ -53,7 +53,7 @@ class LocalApps: ObservableObject {
                                                                            create: true).path {
             _paths_to_find.append(userApplicationDirectoryPath)
         }
-        self.paths_to_find = _paths_to_find
+        self.paths_to_find = Set(_paths_to_find)
         
         self.refresh()
     }
@@ -64,7 +64,7 @@ class LocalApps: ObservableObject {
         self.matched_apps = []
         self.ready_apps_count = 0
         DispatchQueue.global(qos: .default).async {
-            let ignoreApps = getAppStoreApps(self.paths_to_find) + getAppleApps(self.paths_to_find)
+            let ignoreApps = getAppStoreApps(self.paths_to_find).union(getAppleApps(self.paths_to_find))
             var apps: [LocalApp] = []
             
             for path in self.paths_to_find {
