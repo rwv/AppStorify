@@ -41,6 +41,7 @@ class LocalApps: ObservableObject {
     @Published var apps: [LocalApp] = []
     @Published var matched_apps: [LocalApp] = []
     @Published var ready_apps_count = 0
+    @Published var lock = false
     
     private init() {
         // Set search path
@@ -58,6 +59,7 @@ class LocalApps: ObservableObject {
     }
     
     func refresh() -> Void {
+        self.lock = true
         self.apps = []
         self.matched_apps = []
         self.ready_apps_count = 0
@@ -78,6 +80,7 @@ class LocalApps: ObservableObject {
             
             DispatchQueue.main.async {
                 self.apps = apps
+                self.lock = false
             }
         }
     }
@@ -92,7 +95,7 @@ class LocalApps: ObservableObject {
     }
     
     var fullLoaded: Bool {
-        return apps_count == ready_apps_count
+        return (apps_count == ready_apps_count) && (!lock)
     }
 }
 

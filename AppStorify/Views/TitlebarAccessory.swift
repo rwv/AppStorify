@@ -91,6 +91,7 @@ struct TitlebarAccessory: View {
                     Image(nsImage: NSImage(named: NSImage.refreshTemplateName)!)
                 }.buttonStyle(BorderlessButtonStyle())
                 .accessibility(label: Text("Refresh"))
+                .disabled(apps.lock)
                 Button(action: {
                     NSWorkspace.shared.open(URL(string: GITHUB_URL)!)
                 }) {
