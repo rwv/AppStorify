@@ -11,7 +11,7 @@ class LocalApp {
     var appstore_app: AppStoreApp!
     unowned let parent: LocalApps
     
-    init(path: String, country: String = "US", parent: LocalApps) {
+    init(path: String, country: String = DEFAULT_COUNTRY_CODE, parent: LocalApps) {
         self.path = path
         self.parent = parent
         

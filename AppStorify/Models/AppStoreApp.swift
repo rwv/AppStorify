@@ -12,7 +12,7 @@ class AppStoreApp: ObservableObject  {
     weak var parent: LocalApp?
     private weak var task: URLSessionTask?
     
-    init(searchAppName: String, country: String = "US", parent: LocalApp) {
+    init(searchAppName: String, country: String = DEFAULT_COUNTRY_CODE, parent: LocalApp) {
         self.searchAppName = searchAppName
         self.parent = parent
         
