@@ -29,8 +29,6 @@ class AppStoreApp: ObservableObject  {
         
         
         let task = URLSession.shared.dataTask(with: url) { data, response, error in
-            guard let data = data else { return }
-            
             do {
                 defer {
                     DispatchQueue.main.async {
@@ -41,21 +39,23 @@ class AppStoreApp: ObservableObject  {
                     }
                 }
                 
-                guard let response_info = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String:Any] else { return }
-                guard let results = response_info["results"] as? [[String:Any]] else { return }
-                if results.count > 0 {
-                    let result = results[0]
-                    guard let appStoreAppName = result["trackName"] as? String else { return }
-                    
-                    if appStoreAppName == self.searchAppName {
-                        DispatchQueue.main.async {
-                            self.matched = true
-                            self.version = result["version"] as? String
-                            self.appId = result["trackId"] as? Int
-                            
-                            if let local_app = self.parent {
-                                local_app.parent.matched_apps.append(local_app)
-                            }
+                guard let data = data,
+                      let response_info = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String:Any],
+                      let results = response_info["results"] as? [[String:Any]],
+                      let result = results.first,
+                      let appStoreAppName = result["trackName"] as? String
+                else {
+                    return
+                }
+                
+                if appStoreAppName == self.searchAppName {
+                    DispatchQueue.main.async {
+                        self.matched = true
+                        self.version = result["version"] as? String
+                        self.appId = result["trackId"] as? Int
+                        
+                        if let local_app = self.parent {
+                            local_app.parent.matched_apps.append(local_app)
                         }
                     }
                 }
@@ -74,10 +74,9 @@ class AppStoreApp: ObservableObject  {
     }
     
     func openAppStore() -> Void {
-        if let appId = self.appId {
-            if let url = URL(string: "itms-apps://apple.com/app/id\(appId)") {
-                NSWorkspace.shared.open(url)
-            }
+        if let appId = self.appId,
+           let url = URL(string: "itms-apps://apple.com/app/id\(appId)") {
+            NSWorkspace.shared.open(url)
         }
     }
 }
