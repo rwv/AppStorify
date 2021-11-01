@@ -61,17 +61,23 @@ class LocalApps: ObservableObject {
         self.apps = []
         self.matched_apps = []
         self.ready_apps_count = 0
-        
-        let ignoreApps = getAppStoreApps(paths_to_find) + getAppleApps(paths_to_find)
-        
-        for path in paths_to_find {
-            if let app_filenames = try? FileManager.default.contentsOfDirectory(atPath: path).filter({ $0.suffix(4) == ".app" }) {
-                for app_filename in app_filenames {
-                    let app_path = "\(path)/\(app_filename)"
-                    if !ignoreApps.contains(app_path) {
-                        self.apps.append(LocalApp(path: app_path, country: country, parent: self))
+        DispatchQueue.global(qos: .default).async {
+            let ignoreApps = getAppStoreApps(self.paths_to_find) + getAppleApps(self.paths_to_find)
+            var apps: [LocalApp] = []
+            
+            for path in self.paths_to_find {
+                if let app_filenames = try? FileManager.default.contentsOfDirectory(atPath: path).filter({ $0.suffix(4) == ".app" }) {
+                    for app_filename in app_filenames {
+                        let app_path = "\(path)/\(app_filename)"
+                        if !ignoreApps.contains(app_path) {
+                            apps.append(LocalApp(path: app_path, country: self.country, parent: self))
+                        }
                     }
                 }
+            }
+            
+            DispatchQueue.main.async {
+                self.apps = apps
             }
         }
     }
