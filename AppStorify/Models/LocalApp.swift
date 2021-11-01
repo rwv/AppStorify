@@ -26,20 +26,22 @@ class LocalApp {
             if let plistXML = String(data: data, encoding: .utf8),
                let plistData:Data = plistXML.data(using: .utf8),
                let swiftDictionary = try? PropertyListSerialization.propertyList(from: plistData, format: &propertyListFormat) as? [String:Any] {
-                DispatchQueue.main.async {
-                    self.info = swiftDictionary
-                    // search for App Store
-                    if !(self.isAppleApp) && !(self.isAppStore) {
-                        self.appstore_app = AppStoreApp(searchAppName: self.appName, country: country, parent: self)
-                    }
-                    else {
+                self.info = swiftDictionary
+                // search for App Store
+                if !(self.isAppleApp) && !(self.isAppStore) {
+                    self.appstore_app = AppStoreApp(searchAppName: self.appName, country: country, parent: self)
+                }
+                else {
+                    DispatchQueue.main.async {
+                        // TODO: lock after refresh
                         self.parent.ready_apps_count += 1
                     }
                 }
             }
             else {
+                print("Failed to get info from \(path)")
                 DispatchQueue.main.async {
-                    print("Failed to get info from \(path)")
+                    // TODO: lock after refresh
                     self.parent.ready_apps_count += 1
                 }
             }
