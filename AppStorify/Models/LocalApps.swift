@@ -40,7 +40,6 @@ class LocalApps: ObservableObject {
                     let app_path = "\(path)/\(app_filename)"
                     if !ignoreApps.contains(app_path) {
                         self.apps.append(LocalApp(path: app_path, country: country, parent: self))
-                        print(app_path)
                     }
                 }
             }
