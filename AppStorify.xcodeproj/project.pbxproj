@@ -326,7 +326,7 @@
 				CODE_SIGN_ENTITLEMENTS = AppStorify/AppStorify.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_ASSET_PATHS = "\"AppStorify/Preview Content\"";
 				DEVELOPMENT_TEAM = PWQKDJ2FK3;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -337,7 +337,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.15;
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = cz.zczc.AppStorify;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -352,7 +352,7 @@
 				CODE_SIGN_ENTITLEMENTS = AppStorify/AppStorify.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_ASSET_PATHS = "\"AppStorify/Preview Content\"";
 				DEVELOPMENT_TEAM = PWQKDJ2FK3;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -363,7 +363,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.15;
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = cz.zczc.AppStorify;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
